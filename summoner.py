@@ -16,3 +16,6 @@ class Ranked:
          self.wins = wins
          self.losses = losses
 
+
+
+
