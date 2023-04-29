@@ -8,7 +8,7 @@ class Summoner:
 
 
 #A class that represents a summoners stats related to a game type (flex/soloQ)
-class ranked:
+class Ranked:
      def __init__(self, tiere, rank, leaguePoints, wins, losses,):
          self.tiere = tiere
          self.rank = rank
