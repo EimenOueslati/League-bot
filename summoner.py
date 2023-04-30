@@ -23,7 +23,7 @@ class Summoner:
         self.summonerName = summonerName
         self.flex = flex
         self.soloQ = soloQ
-
+    # Return a list containing SoloQ ranked games stats if the object exists
     def getSoloQ(self):
         if self.soloQ is not None:
             stats = [
@@ -33,7 +33,7 @@ class Summoner:
             return stats
         else:
             return None
-
+    # Return a list containing flex ranked games stats if the object exists
     def getFlex(self):
         if self.flex is not None:
             stats = [
@@ -44,7 +44,7 @@ class Summoner:
         else:
             return None
 
-
+# Create a Ranked object out of stats dict
 def Parce_ranked(obj):
     return Ranked(obj['queueType'], obj['tier'], obj['rank'],
                   obj['leaguePoints'], obj['wins'], obj['losses'])

@@ -5,20 +5,21 @@ import json
 import summoner
 from typing import List
 
+# Initialize the client
 client = discord.Client()
 
-
+# Confirmation message
 @client.event
 async def on_ready():
     print('we have loged in as {0.user}'.format(client))
 
-
-GREETING_MESSAGE = "Hello there! \nI am a friendly discord bot that will help you track some statistics about you league of legends account. \nIf you want some advice on how to improve, or just want some people to play with, don't hesitate to send a message in the league of legends channel and I am sure everyone will be happy to help."
+# Initialize variable for message responses and http requests
+GREETING_MESSAGE = "Hello there! \nI am a friendly discord bot that will help you track some statistics about you league of legends account, just type &elo <your summoner name> \nIf you want some advice on how to improve, or just want some people to play with, don't hesitate to send a message in the league of legends channel and I am sure everyone will be happy to help."
 GET_SUMMONER_BY_NAME_ENDPOINT = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"
 GET_ENTRIES_BY_SUMID = "https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 API_KEY = {'api_key': str(os.getenv('KEY'))}
 
-
+# Request the summoner information from Riot API and return the encrypted summoner id (if name is valid)
 def get_summoner_id(name):
     response = requests.get(GET_SUMMONER_BY_NAME_ENDPOINT + name,
                             params=API_KEY)
@@ -28,7 +29,7 @@ def get_summoner_id(name):
 
     return json.loads(response.text)['id']
 
-
+# Request summoner stats from Riot API and return a Summoner object
 def get_summoner_stats(id, name):
 
     r = requests.get(GET_ENTRIES_BY_SUMID + id, params=API_KEY)
@@ -54,7 +55,7 @@ def get_summoner_stats(id, name):
     else:
         return summoner.Summoner(name, stats[0], stats[1])
 
-
+# Parce the summoner stats into a string to be sent as a message
 def parse_stats(summ: summoner.Summoner) -> str:
     ret = f"{summ.summonerName}: \n"
     if summ.soloQ is not None:
@@ -73,12 +74,13 @@ def parse_stats(summ: summoner.Summoner) -> str:
 
 @client.event
 async def on_message(message):
+    # Igrone any messages sent by the bot
     if message.author == client.user:
         return
-
+    # Respond to greeting message
     elif message.content.lower().startswith("&helo"):
         await message.channel.send(GREETING_MESSAGE)
-
+    # Respond to info requests
     elif message.content.lower().startswith("&elo"):
         summoner_name = message.content.lstrip("&elo")
         summoner_name = summoner_name.strip()
@@ -86,7 +88,7 @@ async def on_message(message):
         encrypted_summ_id = get_summoner_id(summoner_name)
         if encrypted_summ_id is None:
             await message.channel.send(
-                f"Sorry! Could not find you account stats. Maybe try checking if the name you entered is correct. status {status}"
+                f"Sorry! Could not find you account stats. Maybe try checking if the name you entered is correct."
             )
             return
         summoner_obj = get_summoner_stats(encrypted_summ_id, summoner_name)
