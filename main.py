@@ -4,6 +4,7 @@ import os
 import json
 import summoner
 from typing import List
+from keep_awake import keep_awake
 
 # Initialize the client
 client = discord.Client()
@@ -98,3 +99,5 @@ async def on_message(message):
             return
         await message.channel.send(parse_stats(summoner_obj))
 
+keep_awake()
+client.run(os.getenv('token'))
