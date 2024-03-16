@@ -1,7 +1,7 @@
 # League-bot
 
 A discord bot made with Python. The bot can receive commands to display some League of Legends account statistics, such as rank for flex and soloq, win rate, and amount of wins and losses for the current ranked season.
-
+The bot is highly customizable.
 
 # Details
 
